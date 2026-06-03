@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css" rel="stylesheet">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
 :root {
     --font-primary: 'Outfit', sans-serif;
@@ -60,7 +64,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 /* ==========================================================================\
 <truncated 7191 bytes>
-</style>
+
+    </style>
 </head>
 <body class="dark-theme">
     <div class="d-flex" id="wrapper">
@@ -639,7 +644,7 @@ h1, h2, h3, h4, h5, h6 {
                                         <div class="col-md-4 mb-3 mb-md-0">
                                             <div class="output-card p-3 border rounded text-center">
                                                 <div class="text-uppercase text-muted xsmall mb-1">Regla del Trapecio</div>
-                                                <h3 class="fw-bold m-0 text-white" id="m4-out-trapecio">--</h3>
+                                                <h3 class="fw-bold m-0 text-primary" id="m4-out-trapecio">--</h3>
                                                 <small class="text-muted">Bs acumulado</small>
                                             </div>
                                         </div>
@@ -665,6 +670,22 @@ h1, h2, h3, h4, h5, h6 {
                                     <div class="chart-container" style="position: relative; height:280px;">
                                         <canvas id="m4-chart"></canvas>
                                     </div>
+                                    <div class="mt-4">
+                                        <h6 class="fw-bold mb-2">Tabla de Precios Diarios (Datos Integrados)</h6>
+                                        <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                                            <table class="table table-dark table-striped table-sm text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Día (x)</th>
+                                                        <th>Precio Estimado (f(x))</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="m4-tabla-body">
+                                                    <!-- Inyectado dinámicamente -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -685,7 +706,7 @@ h1, h2, h3, h4, h5, h6 {
                                 <div class="card-body">
                                     <form id="form-modulo5">
                                         <div class="p-3 bg-dark-subtle rounded border mb-3">
-                                            <h6 class="fw-bold mb-1 small text-white">Modelo No Lineal del Umbral</h6>
+                                            <h6 class="fw-bold mb-1 small text-body">Modelo No Lineal del Umbral</h6>
                                             <p class="xsmall text-muted m-0">$f(t) = C(t) - S(t)$ donde el costo acumulado excede al salario de subsistencia. Función representativa:</p>
                                             <p class="m-0 text-center font-monospace text-warning py-1">$f(t) = 5.2 e^{0.12 t} - 180 + 3.5 t$</p>
                                         </div>
@@ -855,7 +876,7 @@ h1, h2, h3, h4, h5, h6 {
                                         </div>
                                         <div class="col-md-6">
                                             <div class="p-3 bg-secondary-subtle border-start border-secondary border-4 rounded h-100">
-                                                <h6 class="fw-bold text-white"><i class="bi bi-bezier2 me-2"></i>Desplazamiento Relativo</h6>
+                                                <h6 class="fw-bold"><i class="bi bi-bezier2 me-2"></i>Desplazamiento Relativo</h6>
                                                 <div class="mt-2">
                                                     <div class="d-flex justify-content-between border-bottom pb-1 small">
                                                         <span>Cambio en Datos ($\|\Delta b\|/\|b\|$):</span>
@@ -873,7 +894,7 @@ h1, h2, h3, h4, h5, h6 {
                                         <div class="col-md-6 mb-3 mb-md-0">
                                             <div class="output-card p-3 border rounded text-center h-100">
                                                 <div class="text-uppercase text-muted xsmall mb-1">Distribución Original ($x$)</div>
-                                                <div class="fs-5 fw-bold text-white" id="m6-out-x-org">--</div>
+                                                <div class="fs-5 fw-bold text-body" id="m6-out-x-org">--</div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -1061,6 +1082,7 @@ h1, h2, h3, h4, h5, h6 {
             </main>
         </div>
     </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -1311,7 +1333,8 @@ const MathLib = {
         return {t, y};
     }
 };
-</script>
+
+    </script>
     <script>
 let charts = {};
 function initChart(id, config) {
@@ -1370,7 +1393,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let maxIter = parseInt(document.getElementById('m1-maxiter').value);
         let res;
         if(method === "LU" || method === "Gradiente") {
-            res = { x: MathLib.solveGauss(A, b), history: [] }; 
+            let xSol = MathLib.solveGauss(A, b);
+            res = { x: xSol, history: [{iter: "Directo", x: xSol, error: 0}] }; 
         } else if(method === "Jacobi") {
             res = MathLib.Jacobi(A, b, tol, maxIter);
         } else if(method === "GaussSeidel") {
@@ -1480,6 +1504,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('m4-out-simpson38').innerText = resSimp38.toFixed(2);
         let perdida = (resSimp13 / salario) * 100;
         document.getElementById('m4-out-perdida').innerText = `El gasto acumulado representa un ${perdida.toFixed(1)}% del salario base familiar.`;
+        
+        let m4Tbody = document.getElementById('m4-tabla-body');
+        m4Tbody.innerHTML = '';
+        for(let i=0; i<xData.length; i++) {
+            m4Tbody.innerHTML += `<tr><td>Día ${xData[i].toFixed(1)}</td><td>${fData[i].toFixed(2)} Bs</td></tr>`;
+        }
+        
         initChart('m4-chart', {
             type: 'line',
             data: {
@@ -1604,6 +1635,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-</script>
+
+    </script>
 </body>
 </html>
