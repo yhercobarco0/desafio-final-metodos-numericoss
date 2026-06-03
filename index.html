@@ -1,0 +1,1609 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Multidimensional de Crisis: Abastecimiento, Precios y Conflicto Social</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+:root {
+    --font-primary: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --bg-primary: #0b0f19;
+    --bg-secondary: #131926;
+    --bg-tertiary: #1d2636;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+    --glass-bg: rgba(19, 25, 38, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --glass-shadow: rgba(0, 0, 0, 0.4);
+    --color-primary: #3b82f6;
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-danger: #ef4444;
+    --color-purple: #8b5cf6;
+    --color-secondary: #6b7280;
+    --gradient-primary: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    --gradient-danger: linear-gradient(135deg, #ef4444, #f59e0b);
+    --gradient-purple-orange: linear-gradient(135deg, #a78bfa, #f43f5e);
+    --gradient-dark: linear-gradient(135deg, #0b0f19, #1e293b);
+}
+body.light-theme {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f1f5f9;
+    --border-color: rgba(0, 0, 0, 0.08);
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-shadow: rgba(15, 23, 42, 0.06);
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: var(--font-primary);
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    overflow-x: hidden;
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+}
+/* ==========================================================================\
+<truncated 7191 bytes>
+</style>
+</head>
+<body class="dark-theme">
+    <div class="d-flex" id="wrapper">
+        <nav id="sidebar-wrapper" class="border-end">
+            <div class="sidebar-heading border-bottom">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-activity text-danger fs-3"></i>
+                    <div>
+                        <h5 class="m-0 fw-bold">CRISIS-SIM</h5>
+                        <small class="text-muted text-uppercase tracking-wider">Métodos Numéricos</small>
+                    </div>
+                </div>
+            </div>
+            <div class="list-group list-group-flush" id="main-nav">
+                <div class="sidebar-category">Contexto General</div>
+                <a href="#inicio" class="list-group-item list-group-item-action active-nav-item" data-section="inicio">
+                    <i class="bi bi-house-door me-2"></i> Inicio
+                </a>
+                <div class="sidebar-category">Escenarios de Simulación</div>
+                <a href="#modulo1" class="list-group-item list-group-item-action" data-section="modulo1">
+                    <i class="bi bi-truck me-2"></i> M1: Abastecimiento
+                    <span class="badge bg-primary rounded-pill ms-auto">SEL</span>
+                </a>
+                <a href="#modulo2" class="list-group-item list-group-item-action" data-section="modulo2">
+                    <i class="bi bi-droplet-half me-2"></i> M2: Reservas
+                    <span class="badge bg-success rounded-pill ms-auto">EDO</span>
+                </a>
+                <a href="#modulo3" class="list-group-item list-group-item-action" data-section="modulo3">
+                    <i class="bi bi-graph-up me-2"></i> M3: Precios
+                    <span class="badge bg-warning text-dark rounded-pill ms-auto">INT</span>
+                </a>
+                <a href="#modulo4" class="list-group-item list-group-item-action" data-section="modulo4">
+                    <i class="bi bi-calculator me-2"></i> M4: Costo Acumulado
+                    <span class="badge bg-info text-dark rounded-pill ms-auto">INTG</span>
+                </a>
+                <a href="#modulo5" class="list-group-item list-group-item-action" data-section="modulo5">
+                    <i class="bi bi-bullseye me-2"></i> M5: Umbral Crítico
+                    <span class="badge bg-danger rounded-pill ms-auto">RAIZ</span>
+                </a>
+                <a href="#modulo6" class="list-group-item list-group-item-action" data-section="modulo6">
+                    <i class="bi bi-lightning-charge me-2"></i> M6: Rumores y Pánico
+                    <span class="badge bg-secondary rounded-pill ms-auto">COND</span>
+                </a>
+                <a href="#modulo7" class="list-group-item list-group-item-action" data-section="modulo7">
+                    <i class="bi bi-people me-2"></i> M7: Dinámica Social
+                    <span class="badge bg-purple rounded-pill ms-auto">SIS-EDO</span>
+                </a>
+                <div class="sidebar-category">Cierre Académico</div>
+                <a href="#conclusiones" class="list-group-item list-group-item-action" data-section="conclusiones">
+                    <i class="bi bi-journal-text me-2"></i> Conclusiones
+                </a>
+            </div>
+            <div class="sidebar-footer border-top p-3 text-center">
+                <small class="text-muted d-block">Proyecto Métodos Numéricos</small>
+                <span class="badge bg-dark-subtle text-light-emphasis border mt-1">Evaluación Final</span>
+            </div>
+        </nav>
+        <div id="page-content-wrapper" class="w-100">
+            <nav class="navbar navbar-expand-lg border-bottom px-4 py-3 justify-content-between">
+                <button class="btn btn-outline-secondary d-lg-none" id="sidebarToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div class="navbar-brand-title d-none d-lg-block">
+                    <h4 class="m-0 fw-semibold text-gradient-purple-orange">Simulador Multidimensional de Abastecimiento, Precios y Conflicto Social en Contexto de Crisis</h4>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-sm btn-outline-light rounded-circle" id="theme-toggle" title="Cambiar Tema">
+                        <i class="bi bi-sun"></i>
+                    </button>
+                    <span class="badge bg-danger animate-pulse">Simulación de Crisis</span>
+                </div>
+            </nav>
+            <main class="container-fluid p-4">
+                <section id="inicio" class="content-section active-section">
+                    <div class="welcome-card rounded-4 p-5 mb-4 shadow-lg">
+                        <div class="row align-items-center">
+                            <div class="col-lg-8">
+                                <span class="badge bg-danger px-3 py-2 mb-3">Modelado Matemático y Social</span>
+                                <h1 class="display-4 fw-bold mb-3">Abastecimiento, Precios y Conflicto Social en Contexto de Crisis</h1>
+                                <p class="lead mb-4">Esta plataforma simula el comportamiento multidimensional de una sociedad en condiciones de crisis de suministros. A través de 7 escenarios modelados por métodos numéricos rigurosos, analizaremos cómo interactúan las cadenas de distribución, el desabastecimiento físico, la inflación descontrolada, el poder adquisitivo familiar y el estallido de manifestaciones sociales.</p>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <a href="#modulo1" class="btn btn-gradient-primary btn-lg" onclick="navigateToSection('modulo1')">Comenzar Simulación</a>
+                                    <a href="#conclusiones" class="btn btn-outline-light btn-lg" onclick="navigateToSection('conclusiones')">Ver Conclusiones</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 text-center d-none d-lg-block">
+                                <div class="floating-icons-container">
+                                    <i class="bi bi-shield-alert display-1 text-danger animate-float"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card h-100 card-premium">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="icon-box bg-primary-subtle text-primary"><i class="bi bi-truck fs-4"></i></div>
+                                        <span class="badge bg-primary">SEL</span>
+                                    </div>
+                                    <h5 class="card-title fw-bold">M1: Optimización de Abastecimiento</h5>
+                                    <p class="card-text text-muted">Optimiza el envío de recursos críticos desde 3 plantas a 3 zonas de consumo resolviendo Sistemas de Ecuaciones Lineales. Simula qué sucede si se bloquean las rutas terrestres.</p>
+                                    <a href="#modulo1" class="btn btn-link text-primary p-0 text-decoration-none fw-semibold" onclick="navigateToSection('modulo1')">Acceder <i class="bi bi-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card h-100 card-premium">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="icon-box bg-success-subtle text-success"><i class="bi bi-droplet-half fs-4"></i></div>
+                                        <span class="badge bg-success">EDO</span>
+                                    </div>
+                                    <h5 class="card-title fw-bold">M2: Vaciado de Reservas</h5>
+                                    <p class="card-text text-muted">Simula el nivel de un tanque de reservas de combustible o alimentos con tasas variables de consumo. Compara la estabilidad de Euler, Heun y RK4 para predecir colapsos.</p>
+                                    <a href="#modulo2" class="btn btn-link text-success p-0 text-decoration-none fw-semibold" onclick="navigateToSection('modulo2')">Acceder <i class="bi bi-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card h-100 card-premium">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="icon-box bg-warning-subtle text-warning"><i class="bi bi-graph-up fs-4"></i></div>
+                                        <span class="badge bg-warning text-dark">INT</span>
+                                    </div>
+                                    <h5 class="card-title fw-bold">M3: Precios e Inflación</h5>
+                                    <p class="card-text text-muted">Aplica Lagrange, Newton y Splines Cúbicos para reconstruir la trayectoria de precios de alimentos básicos a partir de observaciones dispersas en días de crisis.</p>
+                                    <a href="#modulo3" class="btn btn-link text-warning p-0 text-decoration-none fw-semibold" onclick="navigateToSection('modulo3')">Acceder <i class="bi bi-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card h-100 card-premium">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="icon-box bg-info-subtle text-info"><i class="bi bi-calculator fs-4"></i></div>
+                                        <span class="badge bg-info text-dark">INTG</span>
+                                    </div>
+                                    <h5 class="card-title fw-bold">M4: Gasto y Pérdida Adquisitiva</h5>
+                                    <p class="card-text text-muted">Calcula la integral definida de la curva de precios de la canasta básica a lo largo del mes con las reglas del Trapecio y Simpson para medir la pérdida adquisitiva acumulada.</p>
+                                    <a href="#modulo4" class="btn btn-link text-info p-0 text-decoration-none fw-semibold" onclick="navigateToSection('modulo4')">Acceder <i class="bi bi-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card h-100 card-premium">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="icon-box bg-danger-subtle text-danger"><i class="bi bi-bullseye fs-4"></i></div>
+                                        <span class="badge bg-danger">RAIZ</span>
+                                    </div>
+                                    <h5 class="card-title fw-bold">M5: Umbral Crítico Familiar</h5>
+                                    <p class="card-text text-muted">Resuelve la raíz no lineal del instante preciso donde el costo acumulado de vida supera la capacidad de ingresos de una familia promedio usando métodos iterativos.</p>
+                                    <a href="#modulo5" class="btn btn-link text-danger p-0 text-decoration-none fw-semibold" onclick="navigateToSection('modulo5')">Acceder <i class="bi bi-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card h-100 card-premium">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="icon-box bg-secondary-subtle text-secondary"><i class="bi bi-lightning-charge fs-4"></i></div>
+                                        <span class="badge bg-secondary">COND</span>
+                                    </div>
+                                    <h5 class="card-title fw-bold">M6: Rumores y Pánico de Compras</h5>
+                                    <p class="card-text text-muted">Analiza la sensibilidad de los mercados y los sistemas de abastecimiento bajo compras de pánico inducidas por rumores mediante matrices mal condicionadas y números de condición.</p>
+                                    <a href="#modulo6" class="btn btn-link text-secondary p-0 text-decoration-none fw-semibold" onclick="navigateToSection('modulo6')">Acceder <i class="bi bi-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-4 offset-md-3 offset-xl-4">
+                            <div class="card h-100 card-premium">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="icon-box bg-purple-subtle text-purple"><i class="bi bi-people fs-4"></i></div>
+                                        <span class="badge bg-purple">SIS-EDO</span>
+                                    </div>
+                                    <h5 class="card-title fw-bold">M7: Dinámica del Conflicto Social</h5>
+                                    <p class="card-text text-muted">Simula el estallido, contención y mediación de la protesta social resolviendo un sistema de EDO no lineales que modela Neutrales, Manifestantes y Mediadores.</p>
+                                    <a href="#modulo7" class="btn btn-link text-purple p-0 text-decoration-none fw-semibold" onclick="navigateToSection('modulo7')">Acceder <i class="bi bi-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="modulo1" class="content-section d-none">
+                    <div class="page-title-box mb-4">
+                        <span class="badge bg-primary">Módulo 1</span>
+                        <h2 class="fw-bold">Escenario A: Optimización de Abastecimiento (Sistemas de Ecuaciones Lineales)</h2>
+                        <p class="text-muted">Determina la cantidad de provisiones a enviar desde las plantas de distribución hacia las regiones Norte, Centro y Sur resolviendo un sistema $Ax = b$.</p>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-xl-4">
+                            <div class="card card-premium">
+                                <div class="card-header border-bottom">
+                                    <h5 class="m-0 fw-semibold"><i class="bi bi-sliders me-2"></i>Configuración del Sistema</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="form-modulo1">
+                                        <p class="small text-muted mb-3">Edite los coeficientes de la matriz $A$ (costo/capacidad logística de la planta $i$ hacia la zona $j$):</p>
+                                        <div class="matrix-input mb-3">
+                                            <label class="form-label fw-bold d-block text-center mb-2">Matriz de Coeficientes $A$ (Rutas)</label>
+                                            <div class="row g-2 mb-2 text-center text-muted small">
+                                                <div class="col-4">Norte (x1)</div>
+                                                <div class="col-4">Centro (x2)</div>
+                                                <div class="col-4">Sur (x3)</div>
+                                            </div>
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-4"><input type="number" step="any" class="form-control text-center" id="m1-a00" value="3"></div>
+                                                <div class="col-4"><input type="number" step="any" class="form-control text-center" id="m1-a01" value="2"></div>
+                                                <div class="col-4"><input type="number" step="any" class="form-control text-center" id="m1-a02" value="1"></div>
+                                            </div>
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-4"><input type="number" step="any" class="form-control text-center" id="m1-a10" value="2"></div>
+                                                <div class="col-4"><input type="number" step="any" class="form-control text-center" id="m1-a11" value="5"></div>
+                                                <div class="col-4"><input type="number" step="any" class="form-control text-center" id="m1-a12" value="2"></div>
+                                            </div>
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-4"><input type="number" step="any" class="form-control text-center" id="m1-a20" value="1"></div>
+                                                <div class="col-4"><input type="number" step="any" class="form-control text-center" id="m1-a21" value="2"></div>
+                                                <div class="col-4"><input type="number" step="any" class="form-control text-center" id="m1-a22" value="4"></div>
+                                            </div>
+                                        </div>
+                                        <div class="vector-input mb-3">
+                                            <label class="form-label fw-bold d-block text-center mb-2">Demandas Requeridas $b$ (Toneladas)</label>
+                                            <div class="row g-2">
+                                                <div class="col-4"><input type="number" step="any" class="form-control text-center" id="m1-b0" value="66"></div>
+                                                <div class="col-4"><input type="number" step="any" class="form-control text-center" id="m1-b1" value="117"></div>
+                                                <div class="col-4"><input type="number" step="any" class="form-control text-center" id="m1-b2" value="89"></div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="mb-3">
+                                            <label for="m1-metodo" class="form-label fw-semibold">Método Numérico</label>
+                                            <select class="form-select" id="m1-metodo">
+                                                <option value="LU">Descomposición LU (Directo)</option>
+                                                <option value="Jacobi">Método de Jacobi (Iterativo)</option>
+                                                <option value="GaussSeidel" selected>Gauss-Seidel (Iterativo)</option>
+                                                <option value="SOR">SOR (Relajación Sucesiva)</option>
+                                                <option value="Gradiente">Gradiente Conjugado</option>
+                                            </select>
+                                        </div>
+                                        <div id="m1-iterativo-params" class="p-3 bg-dark-subtle border rounded mb-3">
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-6">
+                                                    <label for="m1-tol" class="form-label small">Tolerancia</label>
+                                                    <input type="number" step="any" class="form-control form-control-sm" id="m1-tol" value="0.0001">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label for="m1-maxiter" class="form-label small">Iter. Máximas</label>
+                                                    <input type="number" class="form-control form-control-sm" id="m1-maxiter" value="100">
+                                                </div>
+                                            </div>
+                                            <div id="m1-sor-w-container" class="d-none">
+                                                <label for="m1-omega" class="form-label small">Parámetro de Relajación ($\omega$)</label>
+                                                <input type="number" step="0.01" class="form-control form-control-sm" id="m1-omega" value="1.25">
+                                                <span class="form-text xsmall">Valores típicos entre 0 y 2. Mayor a 1 acelera la convergencia.</span>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100 fw-bold"><i class="bi bi-play-fill me-2"></i>Calcular Abastecimiento</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8">
+                            <div class="card card-premium mb-4">
+                                <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                                    <h5 class="m-0 fw-semibold"><i class="bi bi-bar-chart-steps me-2"></i>Resultados de Distribución</h5>
+                                    <button class="btn btn-outline-danger btn-sm" id="m1-btn-bloqueo"><i class="bi bi-x-circle me-1"></i>Simular Bloqueo Ruta</button>
+                                </div>
+                                <div class="card-body">
+                                    <div id="m1-res-error" class="alert alert-danger d-none" role="alert"></div>
+                                    <div class="row mb-4">
+                                        <div class="col-md-4 mb-3 mb-md-0">
+                                            <div class="output-card p-3 border rounded text-center">
+                                                <div class="text-uppercase text-muted xsmall mb-1">Envío a Región Norte ($x_1$)</div>
+                                                <h3 class="fw-bold m-0 text-primary" id="m1-out-x1">--</h3>
+                                                <small class="text-muted">Toneladas</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3 mb-md-0">
+                                            <div class="output-card p-3 border rounded text-center">
+                                                <div class="text-uppercase text-muted xsmall mb-1">Envío a Región Centro ($x_2$)</div>
+                                                <h3 class="fw-bold m-0 text-success" id="m1-out-x2">--</h3>
+                                                <small class="text-muted">Toneladas</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="output-card p-3 border rounded text-center">
+                                                <div class="text-uppercase text-muted xsmall mb-1">Envío a Región Sur ($x_3$)</div>
+                                                <h3 class="fw-bold m-0 text-warning" id="m1-out-x3">--</h3>
+                                                <small class="text-muted">Toneladas</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chart-container mb-4" style="position: relative; height:250px;">
+                                        <canvas id="m1-chart"></canvas>
+                                    </div>
+                                    <div class="p-3 bg-body-tertiary border-start border-primary border-4 rounded mb-4">
+                                        <h6 class="fw-bold"><i class="bi bi-info-circle me-2"></i>Análisis Logístico de Rutas</h6>
+                                        <p class="m-0 small text-muted" id="m1-out-interpretacion">Ingrese valores válidos y ejecute el cálculo para obtener la interpretación logística.</p>
+                                    </div>
+                                    <div id="m1-tabla-iter-container" class="d-none">
+                                        <h6 class="fw-bold mb-2">Historial de Iteraciones</h6>
+                                        <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                                            <table class="table table-dark table-striped table-sm text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Iteración</th>
+                                                        <th>$x_1$</th>
+                                                        <th>$x_2$</th>
+                                                        <th>$x_3$</th>
+                                                        <th>Error Relativo</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="m1-tabla-iter-body">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="modulo2" class="content-section d-none">
+                    <div class="page-title-box mb-4">
+                        <span class="badge bg-success">Módulo 2</span>
+                        <h2 class="fw-bold">Escenario B: Vaciado de Reservas (Ecuaciones Diferenciales Ordinarias)</h2>
+                        <p class="text-muted">Simula y compara las tasas de vaciado de los tanques de reserva nacional de alimentos/combustibles usando los métodos de Euler, Heun y Runge-Kutta de cuarto orden.</p>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-xl-4">
+                            <div class="card card-premium">
+                                <div class="card-header border-bottom">
+                                    <h5 class="m-0 fw-semibold"><i class="bi bi-sliders me-2"></i>Parámetros del Tanque</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="form-modulo2">
+                                        <div class="mb-3">
+                                            <label for="m2-reserva-ini" class="form-label fw-semibold">Reserva Inicial ($R_0$)</label>
+                                            <div class="input-group">
+                                                <input type="number" step="any" class="form-control" id="m2-reserva-ini" value="1000">
+                                                <span class="input-group-text">kL o Ton</span>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="m2-entrada" class="form-label fw-semibold">Tasa de Entrada ($E$)</label>
+                                            <div class="input-group">
+                                                <input type="number" step="any" class="form-control" id="m2-entrada" value="20">
+                                                <span class="input-group-text">u/día</span>
+                                            </div>
+                                            <div class="form-text text-muted xsmall">Abastecimiento regular mínimo entrante.</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="m2-consumo" class="form-label fw-semibold">Tasa de Consumo ($C$)</label>
+                                            <div class="input-group">
+                                                <input type="number" step="any" class="form-control" id="m2-consumo" value="80">
+                                                <span class="input-group-text">u/día</span>
+                                            </div>
+                                            <div class="form-text text-muted xsmall">Consumo disparado debido al pánico social.</div>
+                                        </div>
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-6">
+                                                <label for="m2-paso" class="form-label fw-semibold">Paso ($h$)</label>
+                                                <input type="number" step="any" class="form-control" id="m2-paso" value="1">
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="m2-tiempo-max" class="form-label fw-semibold">Límite Días</label>
+                                                <input type="number" class="form-control" id="m2-tiempo-max" value="25">
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-success w-100 fw-bold"><i class="bi bi-play-fill me-2"></i>Iniciar Simulación de Vaciado</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8">
+                            <div class="card card-premium">
+                                <div class="card-header border-bottom">
+                                    <h5 class="m-0 fw-semibold"><i class="bi bi-graph-up me-2"></i>Curva de Agotamiento de Reservas</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-3 align-items-stretch">
+                                        <div class="col-md-6 mb-3 mb-md-0">
+                                            <div class="p-3 bg-danger-subtle border-start border-danger border-4 rounded h-100">
+                                                <h6 class="fw-bold text-danger"><i class="bi bi-exclamation-triangle me-2"></i>Días hasta Nivel Crítico (10%)</h6>
+                                                <h2 class="fw-bold text-danger m-0" id="m2-dias-criticos">--</h2>
+                                                <p class="xsmall text-muted m-0">Tiempo restante antes de alcanzar el nivel crítico de subsistencia.</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-warning-subtle border-start border-warning border-4 rounded h-100">
+                                                <h6 class="fw-bold text-warning-emphasis"><i class="bi bi-clock me-2"></i>Punto de Vaciado Total (R=0)</h6>
+                                                <h2 class="fw-bold text-warning-emphasis m-0" id="m2-colapso-total">--</h2>
+                                                <p class="xsmall text-muted m-0">Estimado basado en el método de Runge-Kutta 4 (RK4).</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chart-container mb-4" style="position: relative; height:300px;">
+                                        <canvas id="m2-chart"></canvas>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6 class="fw-bold mb-2"><i class="bi bi-table me-2"></i>Comparación de Métodos de EDO</h6>
+                                        <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+                                            <table class="table table-dark table-striped table-sm text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Día (t)</th>
+                                                        <th>Euler (R)</th>
+                                                        <th>Heun (R)</th>
+                                                        <th>RK4 (R)</th>
+                                                        <th>Diferencia RK4-Euler</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="m2-tabla-body">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="modulo3" class="content-section d-none">
+                    <div class="page-title-box mb-4">
+                        <span class="badge bg-warning text-dark">Módulo 3</span>
+                        <h2 class="fw-bold">Escenario C: Desabastecimiento y Precios (Interpolación)</h2>
+                        <p class="text-muted">A partir de un conjunto de precios dispersos en días específicos de crisis, predice el costo de los productos en cualquier día intermedio utilizando polinomios interpolantes.</p>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-xl-4">
+                            <div class="card card-premium mb-4">
+                                <div class="card-header border-bottom">
+                                    <h5 class="m-0 fw-semibold"><i class="bi bi-grid-3x3 me-2"></i>Nodos Observados (Día, Precio)</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="form-modulo3">
+                                        <p class="small text-muted mb-3">Valores observados de la canasta básica alimentaria en días de paro nacional:</p>
+                                        <div class="table-responsive mb-3">
+                                            <table class="table table-sm table-dark text-center border align-middle">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Día (x)</th>
+                                                        <th>Precio Bs (y)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="m3-tabla-puntos">
+                                                    <tr>
+                                                        <td><input type="number" class="form-control form-control-sm text-center m3-px" value="1"></td>
+                                                        <td><input type="number" class="form-control form-control-sm text-center m3-py" value="8"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="number" class="form-control form-control-sm text-center m3-px" value="5"></td>
+                                                        <td><input type="number" class="form-control form-control-sm text-center m3-py" value="10"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="number" class="form-control form-control-sm text-center m3-px" value="10"></td>
+                                                        <td><input type="number" class="form-control form-control-sm text-center m3-py" value="13"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="number" class="form-control form-control-sm text-center m3-px" value="15"></td>
+                                                        <td><input type="number" class="form-control form-control-sm text-center m3-py" value="16"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="number" class="form-control form-control-sm text-center m3-px" value="20"></td>
+                                                        <td><input type="number" class="form-control form-control-sm text-center m3-py" value="19"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="number" class="form-control form-control-sm text-center m3-px" value="30"></td>
+                                                        <td><input type="number" class="form-control form-control-sm text-center m3-py" value="22"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <hr>
+                                        <div class="mb-3">
+                                            <label for="m3-dia-estimar" class="form-label fw-semibold">Estimación para el Día:</label>
+                                            <input type="number" class="form-control" id="m3-dia-estimar" value="12" min="1" max="30">
+                                            <span class="form-text text-muted xsmall">Día intermedio en el que desea estimar el precio.</span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="m3-metodo" class="form-label fw-semibold">Método de Interpolación</label>
+                                            <select class="form-select" id="m3-metodo">
+                                                <option value="Lagrange">Polinomio de Lagrange</option>
+                                                <option value="Newton">Polinomio de Newton (Dif. Divididas)</option>
+                                                <option value="Splines" selected>Splines Cúbicos Naturales</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-warning text-dark w-100 fw-bold"><i class="bi bi-play-fill me-2"></i>Calcular Precio Estimado</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8">
+                            <div class="card card-premium">
+                                <div class="card-header border-bottom">
+                                    <h5 class="m-0 fw-semibold"><i class="bi bi-graph-up-arrow me-2"></i>Gráfico e Interpolación</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-4 align-items-stretch">
+                                        <div class="col-md-6 mb-3 mb-md-0">
+                                            <div class="p-3 bg-warning-subtle border-start border-warning border-4 rounded h-100 text-center">
+                                                <span class="text-uppercase text-muted xsmall">Precio Estimado en Día <strong id="m3-out-dia-label">--</strong></span>
+                                                <h1 class="fw-bold m-0 text-warning-emphasis" id="m3-out-precio">-- Bs</h1>
+                                                <p class="xsmall text-muted m-0">Basado en la curva de interpolación construida.</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-dark-subtle border-start border-secondary border-4 rounded h-100">
+                                                <h6 class="fw-bold text-light"><i class="bi bi-braces me-2"></i>Información Analítica</h6>
+                                                <div class="small text-muted" id="m3-out-ecuacion" style="font-family: 'JetBrains Mono', monospace; word-break: break-all;">
+                                                    Presione Calcular para generar el modelo matemático.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chart-container" style="position: relative; height:350px;">
+                                        <canvas id="m3-chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="modulo4" class="content-section d-none">
+                    <div class="page-title-box mb-4">
+                        <span class="badge bg-info text-dark">Módulo 4</span>
+                        <h2 class="fw-bold">Escenario D: Costo Acumulado (Integración Numérica)</h2>
+                        <p class="text-muted">Calcula el gasto total realizado para comprar la canasta básica a lo largo de un período de crisis. Mide el área bajo la curva de precios e interpreta la pérdida del poder adquisitivo.</p>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-xl-4">
+                            <div class="card card-premium">
+                                <div class="card-header border-bottom">
+                                    <h5 class="m-0 fw-semibold"><i class="bi bi-sliders me-2"></i>Parámetros de Integración</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="form-modulo4">
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-6">
+                                                <label for="m4-a" class="form-label fw-semibold">Límite Inferior ($a$)</label>
+                                                <input type="number" class="form-control" id="m4-a" value="1">
+                                                <div class="form-text xsmall">Día de inicio</div>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="m4-b" class="form-label fw-semibold">Límite Superior ($b$)</label>
+                                                <input type="number" class="form-control" id="m4-b" value="30">
+                                                <div class="form-text xsmall">Día final</div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="m4-n" class="form-label fw-semibold">Número de Subintervalos ($n$)</label>
+                                            <input type="number" class="form-control" id="m4-n" value="6" min="6" step="6">
+                                            <div class="form-text text-muted xsmall">Para permitir Simpson 1/3 e Simpson 3/8, elija un múltiplo de 6.</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="m4-salario" class="form-label fw-semibold">Salario Familiar de Referencia (Bs/mes)</label>
+                                            <input type="number" class="form-control" id="m4-salario" value="500">
+                                            <div class="form-text text-muted xsmall">Sueldo disponible mensual de la familia de control.</div>
+                                        </div>
+                                        <button type="submit" class="btn btn-info text-dark w-100 fw-bold"><i class="bi bi-play-fill me-2"></i>Calcular Costo e Integrales</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8">
+                            <div class="card card-premium">
+                                <div class="card-header border-bottom">
+                                    <h5 class="m-0 fw-semibold"><i class="bi bi-graph-up me-2"></i>Área de Gasto Acumulado</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-4">
+                                        <div class="col-md-4 mb-3 mb-md-0">
+                                            <div class="output-card p-3 border rounded text-center">
+                                                <div class="text-uppercase text-muted xsmall mb-1">Regla del Trapecio</div>
+                                                <h3 class="fw-bold m-0 text-white" id="m4-out-trapecio">--</h3>
+                                                <small class="text-muted">Bs acumulado</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3 mb-md-0">
+                                            <div class="output-card p-3 border rounded text-center">
+                                                <div class="text-uppercase text-muted xsmall mb-1">Simpson 1/3</div>
+                                                <h3 class="fw-bold m-0 text-info" id="m4-out-simpson13">--</h3>
+                                                <small class="text-muted">Bs acumulado</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="output-card p-3 border rounded text-center">
+                                                <div class="text-uppercase text-muted xsmall mb-1">Simpson 3/8</div>
+                                                <h3 class="fw-bold m-0 text-success" id="m4-out-simpson38">--</h3>
+                                                <small class="text-muted">Bs acumulado</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 bg-danger-subtle border-start border-danger border-4 rounded mb-4">
+                                        <h6 class="fw-bold text-danger"><i class="bi bi-piggy-bank me-2"></i>Pérdida de Capacidad Adquisitiva</h6>
+                                        <p class="m-0 small text-muted" id="m4-out-perdida">Efectúe el cálculo para estimar el porcentaje del salario devorado por la inflación en base a Simpson 1/3.</p>
+                                    </div>
+                                    <div class="chart-container" style="position: relative; height:280px;">
+                                        <canvas id="m4-chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="modulo5" class="content-section d-none">
+                    <div class="page-title-box mb-4">
+                        <span class="badge bg-danger">Módulo 5</span>
+                        <h2 class="fw-bold">Escenario E: Umbrales Críticos (Raíces de Ecuaciones No Lineales)</h2>
+                        <p class="text-muted">Encuentra el instante exacto en el que el costo acumulado de la canasta básica excede al salario familiar de subsistencia ($f(t) = 0$) para anticipar estallidos.</p>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-xl-4">
+                            <div class="card card-premium">
+                                <div class="card-header border-bottom">
+                                    <h5 class="m-0 fw-semibold"><i class="bi bi-sliders me-2"></i>Parámetros del Buscador</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="form-modulo5">
+                                        <div class="p-3 bg-dark-subtle rounded border mb-3">
+                                            <h6 class="fw-bold mb-1 small text-white">Modelo No Lineal del Umbral</h6>
+                                            <p class="xsmall text-muted m-0">$f(t) = C(t) - S(t)$ donde el costo acumulado excede al salario de subsistencia. Función representativa:</p>
+                                            <p class="m-0 text-center font-monospace text-warning py-1">$f(t) = 5.2 e^{0.12 t} - 180 + 3.5 t$</p>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="m5-metodo" class="form-label fw-semibold">Método Numérico</label>
+                                            <select class="form-select" id="m5-metodo">
+                                                <option value="Biseccion">Método de Bisección (Cerrado)</option>
+                                                <option value="Newton" selected>Método de Newton-Raphson (Abierto)</option>
+                                                <option value="Secante">Método de la Secante (Abierto)</option>
+                                            </select>
+                                        </div>
+                                        <div class="row g-2 mb-3" id="m5-intervalo-container">
+                                            <div class="col-6">
+                                                <label for="m5-a" class="form-label small">Intervalo Inicial ($a$)</label>
+                                                <input type="number" class="form-control" id="m5-a" value="10">
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="m5-b" class="form-label small">Intervalo Inicial ($b$)</label>
+                                                <input type="number" class="form-control" id="m5-b" value="35">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 d-none" id="m5-puntoini-container">
+                                            <label for="m5-x0" class="form-label fw-semibold">Punto de Partida ($x_0$)</label>
+                                            <input type="number" class="form-control" id="m5-x0" value="20">
+                                        </div>
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-6">
+                                                <label for="m5-tol" class="form-label small">Tolerancia</label>
+                                                <input type="number" step="any" class="form-control" id="m5-tol" value="0.0001">
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="m5-maxiter" class="form-label small">Iter. Máximas</label>
+                                                <input type="number" class="form-control" id="m5-maxiter" value="50">
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-danger w-100 fw-bold"><i class="bi bi-play-fill me-2"></i>Calcular Raíz Crítica</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8">
+                            <div class="card card-premium">
+                                <div class="card-header border-bottom">
+                                    <h5 class="m-0 fw-semibold"><i class="bi bi-bullseye me-2"></i>Detección del Punto Crítico</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-3 align-items-stretch">
+                                        <div class="col-md-6 mb-3 mb-md-0">
+                                            <div class="p-3 bg-danger-subtle border-start border-danger border-4 rounded h-100">
+                                                <h6 class="fw-bold text-danger"><i class="bi bi-clock-history me-2"></i>Día Crítico Encontrado ($t^*$)</h6>
+                                                <h2 class="fw-bold text-danger m-0" id="m5-out-raiz">--</h2>
+                                                <p class="xsmall text-muted m-0">Instante en que se quiebra el umbral financiero familiar.</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-info-subtle border-start border-info border-4 rounded h-100">
+                                                <h6 class="fw-bold text-info-emphasis"><i class="bi bi-arrow-down-left-square me-2"></i>Convergencia Evaluada</h6>
+                                                <div class="row text-center mt-2">
+                                                    <div class="col-6 border-end">
+                                                        <h4 class="m-0 fw-bold" id="m5-out-iteraciones">--</h4>
+                                                        <span class="xsmall text-muted">Iteraciones</span>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <h4 class="m-0 fw-bold" id="m5-out-convergencia">--</h4>
+                                                        <span class="xsmall text-muted">Orden Estimado</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chart-container mb-4" style="position: relative; height:280px;">
+                                        <canvas id="m5-chart"></canvas>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-2">Tabla de Iteraciones de la Raíz</h6>
+                                        <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                                            <table class="table table-dark table-striped table-sm text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Iteración (k)</th>
+                                                        <th>Aproximación ($x_k$)</th>
+                                                        <th>$f(x_k)$</th>
+                                                        <th>Error Absoluto</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="m5-tabla-body">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="modulo6" class="content-section d-none">
+                    <div class="page-title-box mb-4">
+                        <span class="badge bg-secondary">Módulo 6</span>
+                        <h2 class="fw-bold">Escenario F: Rumores y Pánico (Sistemas Mal Condicionados)</h2>
+                        <p class="text-muted">Analiza cómo pequeñas perturbaciones en la demanda de alimentos provocadas por rumores falsos de desabastecimiento desestabilizan drásticamente los sistemas de distribución física.</p>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-xl-4">
+                            <div class="card card-premium">
+                                <div class="card-header border-bottom">
+                                    <h5 class="m-0 fw-semibold"><i class="bi bi-sliders me-2"></i>Matriz Crítica de Demanda ($A$)</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="form-modulo6">
+                                        <p class="small text-muted mb-3">Establezca una matriz de distribución logística sensible al mal condicionamiento:</p>
+                                        <div class="matrix-input mb-3">
+                                            <label class="form-label fw-bold d-block text-center mb-2">Matriz de Rutas $A$</label>
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-6"><input type="number" step="any" class="form-control text-center" id="m6-a00" value="1.0"></div>
+                                                <div class="col-6"><input type="number" step="any" class="form-control text-center" id="m6-a01" value="1.0"></div>
+                                            </div>
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-6"><input type="number" step="any" class="form-control text-center" id="m6-a10" value="1.0"></div>
+                                                <div class="col-6"><input type="number" step="any" class="form-control text-center" id="m6-a11" value="1.0001"></div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Demanda Original ($b$)</label>
+                                            <div class="row g-2">
+                                                <div class="col-6">
+                                                    <input type="number" step="any" class="form-control text-center" id="m6-b0" value="2.0">
+                                                    <div class="form-text xsmall text-center">Zona A</div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <input type="number" step="any" class="form-control text-center" id="m6-b1" value="2.0001">
+                                                    <div class="form-text xsmall text-center">Zona B</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Efecto del Rumor: Perturbación en $b$ ($\Delta b$)</label>
+                                            <div class="row g-2">
+                                                <div class="col-6">
+                                                    <input type="number" step="any" class="form-control text-center" id="m6-db0" value="0.0">
+                                                    <div class="form-text xsmall text-center">$\Delta b_1$</div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <input type="number" step="any" class="form-control text-center" id="m6-db1" value="0.0001">
+                                                    <div class="form-text xsmall text-center">$\Delta b_2$ (ej: +0.0001)</div>
+                                                </div>
+                                            </div>
+                                            <span class="form-text text-muted xsmall">Pequeño rumor de aumento de demanda de solo 0.0001 (un 0.005%).</span>
+                                        </div>
+                                        <button type="submit" class="btn btn-secondary w-100 fw-bold"><i class="bi bi-play-fill me-2"></i>Calcular Sensibilidad Logística</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8">
+                            <div class="card card-premium">
+                                <div class="card-header border-bottom">
+                                    <h5 class="m-0 fw-semibold"><i class="bi bi-bar-chart-steps me-2"></i>Demostración Matemática del Colapso</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-3 align-items-stretch">
+                                        <div class="col-md-6 mb-3 mb-md-0">
+                                            <div class="p-3 bg-danger-subtle border-start border-danger border-4 rounded h-100 text-center">
+                                                <span class="text-uppercase text-muted xsmall">Número de Condición $\|A\| \cdot \|A^{-1}\|$ (Norma $\infty$)</span>
+                                                <h1 class="fw-bold m-0 text-danger" id="m6-out-condicion">--</h1>
+                                                <p class="xsmall text-muted m-0">Si es $\gg 1$, el sistema es críticamente inestable a los rumores.</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-secondary-subtle border-start border-secondary border-4 rounded h-100">
+                                                <h6 class="fw-bold text-white"><i class="bi bi-bezier2 me-2"></i>Desplazamiento Relativo</h6>
+                                                <div class="mt-2">
+                                                    <div class="d-flex justify-content-between border-bottom pb-1 small">
+                                                        <span>Cambio en Datos ($\|\Delta b\|/\|b\|$):</span>
+                                                        <span id="m6-out-cambio-datos" class="fw-bold font-monospace">-- %</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between pt-1 small">
+                                                        <span>Cambio en Solución ($\|\Delta x\|/\|x\|$):</span>
+                                                        <span id="m6-out-cambio-solucion" class="fw-bold font-monospace text-danger">-- %</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4">
+                                        <div class="col-md-6 mb-3 mb-md-0">
+                                            <div class="output-card p-3 border rounded text-center h-100">
+                                                <div class="text-uppercase text-muted xsmall mb-1">Distribución Original ($x$)</div>
+                                                <div class="fs-5 fw-bold text-white" id="m6-out-x-org">--</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="output-card p-3 border rounded text-center border-danger h-100">
+                                                <div class="text-uppercase text-muted xsmall mb-1 text-danger">Solución Bajo Pánico/Rumores ($x + \Delta x$)</div>
+                                                <div class="fs-5 fw-bold text-danger" id="m6-out-x-pert">--</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 bg-body-tertiary border-start border-warning border-4 rounded mb-4">
+                                        <h6 class="fw-bold text-warning-emphasis"><i class="bi bi-lightbulb me-2"></i>Explicación del Fenómeno</h6>
+                                        <p class="m-0 small text-muted" id="m6-out-interpretacion">Complete el cálculo para ver cómo se desvían las rutas y la capacidad física de distribución logística ante la mínima perturbación.</p>
+                                    </div>
+                                    <div class="chart-container" style="position: relative; height:280px;">
+                                        <canvas id="m6-chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="modulo7" class="content-section d-none">
+                    <div class="page-title-box mb-4">
+                        <span class="badge bg-purple">Módulo 7</span>
+                        <h2 class="fw-bold">Escenario G: Dinámica del Conflicto Social (Sistemas de EDO)</h2>
+                        <p class="text-muted">Simula el conflicto de clases en la ciudad resolviendo las ecuaciones diferenciales del sistema de interacción de poblaciones: Neutrales $N(t)$, Manifestantes $M(t)$ y Mediadores $D(t)$.</p>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-xl-4">
+                            <div class="card card-premium">
+                                <div class="card-header border-bottom">
+                                    <h5 class="m-0 fw-semibold"><i class="bi bi-sliders me-2"></i>Poblaciones y Parámetros</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="form-modulo7">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold d-block text-center">Poblaciones Iniciales ($t=0$)</label>
+                                            <div class="row g-2">
+                                                <div class="col-4">
+                                                    <label for="m7-n0" class="form-label small text-muted">Neutrales</label>
+                                                    <input type="number" class="form-control text-center" id="m7-n0" value="500">
+                                                </div>
+                                                <div class="col-4">
+                                                    <label for="m7-m0" class="form-label small text-muted">Manifestantes</label>
+                                                    <input type="number" class="form-control text-center" id="m7-m0" value="10">
+                                                </div>
+                                                <div class="col-4">
+                                                    <label for="m7-d0" class="form-label small text-muted">Mediadores</label>
+                                                    <input type="number" class="form-control text-center" id="m7-d0" value="5">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold d-block text-center">Parámetros del Conflicto</label>
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-6">
+                                                    <label for="m7-a" class="form-label small text-muted">Radicalización ($a$)</label>
+                                                    <input type="number" step="any" class="form-control text-center" id="m7-a" value="0.001">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label for="m7-b" class="form-label small text-muted">Pacificador ($b$)</label>
+                                                    <input type="number" step="any" class="form-control text-center" id="m7-b" value="0.05">
+                                                </div>
+                                            </div>
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-6">
+                                                    <label for="m7-c" class="form-label small text-muted">Contención ($c$)</label>
+                                                    <input type="number" step="any" class="form-control text-center" id="m7-c" value="0.005">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label for="m7-k" class="form-label small text-muted">Movilización ($k$)</label>
+                                                    <input type="number" step="any" class="form-control text-center" id="m7-k" value="0.02">
+                                                </div>
+                                            </div>
+                                            <div class="row g-2">
+                                                <div class="col-12">
+                                                    <label for="m7-r" class="form-label small text-muted">Desgaste Mediadores ($r$)</label>
+                                                    <input type="number" step="any" class="form-control text-center" id="m7-r" value="0.1">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-6">
+                                                <label for="m7-paso" class="form-label small fw-semibold">Paso ($h$)</label>
+                                                <input type="number" step="any" class="form-control" id="m7-paso" value="0.5">
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="m7-tiempo-max" class="form-label small fw-semibold">Tiempo Máx ($t$)</label>
+                                                <input type="number" class="form-control" id="m7-tiempo-max" value="50">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="m7-metodo" class="form-label fw-semibold">Método de Resolución</label>
+                                            <select class="form-select" id="m7-metodo">
+                                                <option value="Heun">Heun para Sistemas</option>
+                                                <option value="RK4" selected>Runge-Kutta 4 para Sistemas</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary text-white w-100 fw-bold"><i class="bi bi-play-fill me-2"></i>Ejecutar Simulación Dinámica</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8">
+                            <div class="card card-premium">
+                                <div class="card-header border-bottom">
+                                    <h5 class="m-0 fw-semibold"><i class="bi bi-graph-up me-2"></i>Evolución de las Poblaciones en el Tiempo</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-3 align-items-stretch">
+                                        <div class="col-12">
+                                            <div class="p-3 bg-purple-subtle border-start border-purple border-4 rounded" id="m7-diagnostico-card">
+                                                <h6 class="fw-bold text-purple-emphasis"><i class="bi bi-heart-pulse me-2"></i>Diagnóstico del Estado del Conflicto</h6>
+                                                <p class="m-0 small text-muted" id="m7-out-diagnostico">Inicie la simulación para obtener la evaluación cualitativa de estabilidad social.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chart-container mb-4" style="position: relative; height:320px;">
+                                        <canvas id="m7-chart"></canvas>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6 class="fw-bold mb-2">Tabla de Poblaciones</h6>
+                                        <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                                            <table class="table table-dark table-striped table-sm text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Tiempo (t)</th>
+                                                        <th>Neutrales (N)</th>
+                                                        <th>Manifestantes (M)</th>
+                                                        <th>Mediadores (D)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="m7-tabla-body">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="conclusiones" class="content-section d-none">
+                    <div class="card card-premium rounded-4 p-5 mb-4 shadow-lg border">
+                        <h2 class="fw-bold mb-3"><i class="bi bi-journal-check text-success me-2"></i>Conclusiones del Modelo de Crisis y Métodos Numéricos</h2>
+                        <hr class="mb-4">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <h5 class="fw-bold text-primary"><i class="bi bi-link-45deg me-2"></i>Interconexión de Variables</h5>
+                                <p class="text-muted small">
+                                    A través de los 7 módulos, logramos modelar matemáticamente cómo se retroalimentan las variables físicas y sociales durante una crisis. 
+                                    La obstrucción de redes de transporte (<strong>Módulo 1</strong>) afecta directamente la rapidez con la que se vacían las bodegas (<strong>Módulo 2</strong>), lo que a su vez se traduce en un desabastecimiento físico en los mercados e incrementa exponencialmente los precios de venta (<strong>Módulo 3</strong>).
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="fw-bold text-warning"><i class="bi bi-graph-down-arrow me-2"></i>Pérdida Adquisitiva e Inestabilidad</h5>
+                                <p class="text-muted small">
+                                    Este desbalance de precios produce un gasto acumulado en la canasta básica que devora los salarios (<strong>Módulo 4</strong>). Cuando las familias cruzan el umbral crítico de subsistencia (<strong>Módulo 5</strong>), se activa un estado de vulnerabilidad severa. 
+                                    La propagación de información distorsionada o pánico de compras en sistemas logísticos mal condicionados (<strong>Módulo 6</strong>) acelera la escasez, encendiendo la mecha del conflicto donde los ciudadanos neutrales pasan a manifestarse activamente (<strong>Módulo 7</strong>).
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="fw-bold text-info"><i class="bi bi-cpu me-2"></i>Relevancia de los Métodos Numéricos</h5>
+                                <p class="text-muted small">
+                                    Los algoritmos desarrollados (desde la resolución de SEL hasta los resolvedores de EDO acoplados) demuestran que las decisiones complejas no pueden guiarse por intuición. 
+                                    Los métodos numéricos brindan predicciones con márgenes de error medibles (como el Número de Condición o los pasos de RK4), permitiendo a los tomadores de decisiones públicas diseñar umbrales de contención en el momento correcto.
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="fw-bold text-danger"><i class="bi bi-gear-wide-connected me-2"></i>Análisis Comparativo Técnico</h5>
+                                <p class="text-muted small">
+                                    En términos matemáticos, el análisis comparativo muestra diferencias críticas: 
+                                    Los resolvedores iterativos (Jacobi/Gauss-Seidel) requieren matrices diagonalmente dominantes para converger, mientras que en integración, la precisión superior de RK4 respecto a Euler permite simular trayectorias realistas con un paso de integración más grande sin inducir divergencias artificiales de simulación.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-dark-subtle border-start border-success border-4 rounded mt-4 text-center">
+                            <h6 class="fw-bold text-white mb-2">Simulador de Crisis Académico Multidimensional</h6>
+                            <p class="m-0 small text-muted">Desarrollado para la Cátedra de Métodos Numéricos en Ingeniería. Implementaciones nativas en JS sin dependencias algebraicas externas.</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+const MathLib = {
+    solveGauss: function(A, b) {
+        let n = A.length;
+        let M = [];
+        for (let i=0; i<n; i++) M.push([...A[i], b[i]]);
+        for (let i=0; i<n; i++) {
+            let maxEl = Math.abs(M[i][i]), maxRow = i;
+            for (let k=i+1; k<n; k++) {
+                if (Math.abs(M[k][i]) > maxEl) { maxEl = Math.abs(M[k][i]); maxRow = k; }
+            }
+            let tmp = M[maxRow]; M[maxRow] = M[i]; M[i] = tmp;
+            for (let k=i+1; k<n; k++) {
+                let c = -M[k][i]/M[i][i];
+                for (let j=i; j<n+1; j++) {
+                    if (i===j) M[k][j] = 0; else M[k][j] += c * M[i][j];
+                }
+            }
+        }
+        let x = new Array(n).fill(0);
+        for (let i=n-1; i>-1; i--) {
+            x[i] = M[i][n] / M[i][i];
+            for (let k=i-1; k>-1; k--) M[k][n] -= M[k][i] * x[i];
+        }
+        return x;
+    },
+    Jacobi: function(A, b, tol, maxIter) {
+        let n = A.length;
+        let x = new Array(n).fill(0);
+        let iter = 0;
+        let error = tol + 1;
+        let history = [];
+        while (error > tol && iter < maxIter) {
+            let xNew = new Array(n).fill(0);
+            for (let i = 0; i < n; i++) {
+                let sum = 0;
+                for (let j = 0; j < n; j++) {
+                    if (j !== i) sum += A[i][j] * x[j];
+                }
+                xNew[i] = (b[i] - sum) / A[i][i];
+            }
+            error = 0;
+            for (let i = 0; i < n; i++) error = Math.max(error, Math.abs(xNew[i] - x[i]));
+            x = [...xNew];
+            history.push({ iter: iter+1, x: [...x], error: error });
+            iter++;
+        }
+        return { x: x, history: history };
+    },
+    GaussSeidel: function(A, b, tol, maxIter) {
+        let n = A.length;
+        let x = new Array(n).fill(0);
+        let iter = 0;
+        let error = tol + 1;
+        let history = [];
+        while (error > tol && iter < maxIter) {
+            let xOld = [...x];
+            for (let i = 0; i < n; i++) {
+                let sum = 0;
+                for (let j = 0; j < n; j++) {
+                    if (j !== i) sum += A[i][j] * x[j]; 
+                }
+                x[i] = (b[i] - sum) / A[i][i];
+            }
+            error = 0;
+            for (let i = 0; i < n; i++) error = Math.max(error, Math.abs(x[i] - xOld[i]));
+            history.push({ iter: iter+1, x: [...x], error: error });
+            iter++;
+        }
+        return { x: x, history: history };
+    },
+    SOR: function(A, b, w, tol, maxIter) {
+        let n = A.length;
+        let x = new Array(n).fill(0);
+        let iter = 0;
+        let error = tol + 1;
+        let history = [];
+        while (error > tol && iter < maxIter) {
+            let xOld = [...x];
+            for (let i = 0; i < n; i++) {
+                let sum = 0;
+                for (let j = 0; j < n; j++) {
+                    if (j !== i) sum += A[i][j] * x[j];
+                }
+                x[i] = (1 - w) * xOld[i] + (w / A[i][i]) * (b[i] - sum);
+            }
+            error = 0;
+            for (let i = 0; i < n; i++) error = Math.max(error, Math.abs(x[i] - xOld[i]));
+            history.push({ iter: iter+1, x: [...x], error: error });
+            iter++;
+        }
+        return { x: x, history: history };
+    },
+    Euler: function(f, y0, t0, tf, h) {
+        let t = [t0], y = [y0];
+        let n = Math.ceil((tf - t0) / h);
+        for(let i=0; i<n; i++) {
+            let ti = t[i], yi = y[i];
+            y.push(yi + h * f(ti, yi));
+            t.push(ti + h);
+            if(y[y.length-1] <= 0) break; 
+        }
+        return {t, y};
+    },
+    Heun: function(f, y0, t0, tf, h) {
+        let t = [t0], y = [y0];
+        let n = Math.ceil((tf - t0) / h);
+        for(let i=0; i<n; i++) {
+            let ti = t[i], yi = y[i];
+            let k1 = f(ti, yi);
+            let k2 = f(ti + h, yi + h * k1);
+            y.push(yi + (h/2)*(k1 + k2));
+            t.push(ti + h);
+            if(y[y.length-1] <= 0) break;
+        }
+        return {t, y};
+    },
+    RK4: function(f, y0, t0, tf, h) {
+        let t = [t0], y = [y0];
+        let n = Math.ceil((tf - t0) / h);
+        for(let i=0; i<n; i++) {
+            let ti = t[i], yi = y[i];
+            let k1 = f(ti, yi);
+            let k2 = f(ti + h/2, yi + h*k1/2);
+            let k3 = f(ti + h/2, yi + h*k2/2);
+            let k4 = f(ti + h, yi + h*k3);
+            y.push(yi + (h/6)*(k1 + 2*k2 + 2*k3 + k4));
+            t.push(ti + h);
+            if(y[y.length-1] <= 0) break;
+        }
+        return {t, y};
+    },
+    Lagrange: function(xData, yData, x) {
+        let sum = 0;
+        for (let i=0; i<xData.length; i++) {
+            let prod = yData[i];
+            for (let j=0; j<xData.length; j++) {
+                if (i !== j) prod *= (x - xData[j]) / (xData[i] - xData[j]);
+            }
+            sum += prod;
+        }
+        return sum;
+    },
+    Trapecio: function(fData, xData) {
+        let sum = 0;
+        for (let i=1; i<xData.length; i++) {
+            sum += (xData[i]-xData[i-1]) * (fData[i-1] + fData[i]) / 2;
+        }
+        return sum;
+    },
+    Simpson13: function(fData, xData) {
+        let h = (xData[xData.length-1] - xData[0]) / (xData.length-1);
+        let sum = fData[0] + fData[fData.length-1];
+        for(let i=1; i<fData.length-1; i++) {
+            sum += i%2 === 0 ? 2*fData[i] : 4*fData[i];
+        }
+        return (h/3) * sum;
+    },
+    Simpson38: function(fData, xData) {
+        let h = (xData[xData.length-1] - xData[0]) / (xData.length-1);
+        let sum = fData[0] + fData[fData.length-1];
+        for(let i=1; i<fData.length-1; i++) {
+            sum += i%3 === 0 ? 2*fData[i] : 3*fData[i];
+        }
+        return (3*h/8) * sum;
+    },
+    Biseccion: function(f, a, b, tol, maxIter) {
+        let history = [];
+        if (f(a) * f(b) >= 0) return { root: null, history, error: "f(a) y f(b) deben tener signos opuestos" };
+        let iter = 0, c = a;
+        while ((b-a)/2 > tol && iter < maxIter) {
+            c = (a+b)/2;
+            let err = (b-a)/2;
+            history.push({ iter: iter+1, x: c, fx: f(c), error: err });
+            if (f(c) === 0) break;
+            else if (f(a)*f(c) < 0) b = c;
+            else a = c;
+            iter++;
+        }
+        return { root: c, history };
+    },
+    NewtonRaphson: function(f, df, x0, tol, maxIter) {
+        let history = [];
+        let x = x0;
+        let iter = 0;
+        let error = tol + 1;
+        while (error > tol && iter < maxIter) {
+            let fx = f(x);
+            let dx = fx / df(x);
+            let xNew = x - dx;
+            error = Math.abs(xNew - x);
+            history.push({ iter: iter+1, x: xNew, fx: f(xNew), error: error });
+            x = xNew;
+            iter++;
+        }
+        return { root: x, history };
+    },
+    Secante: function(f, x0, x1, tol, maxIter) {
+        let history = [];
+        let iter = 0;
+        let error = tol + 1;
+        while (error > tol && iter < maxIter) {
+            let xNew = x1 - f(x1) * ((x1 - x0) / (f(x1) - f(x0)));
+            error = Math.abs(xNew - x1);
+            history.push({ iter: iter+1, x: xNew, fx: f(xNew), error: error });
+            x0 = x1;
+            x1 = xNew;
+            iter++;
+        }
+        return { root: x1, history };
+    },
+    NormaInf: function(A) {
+        let max = 0;
+        for(let i=0; i<A.length; i++){
+            let sum = 0;
+            for(let j=0; j<A[i].length; j++) sum += Math.abs(A[i][j]);
+            if(sum > max) max = sum;
+        }
+        return max;
+    },
+    Inversa2x2: function(A) {
+        let det = A[0][0]*A[1][1] - A[0][1]*A[1][0];
+        return [
+            [A[1][1]/det, -A[0][1]/det],
+            [-A[1][0]/det, A[0][0]/det]
+        ];
+    },
+    RK4System: function(fArr, y0Arr, t0, tf, h) {
+        let n = Math.ceil((tf - t0) / h);
+        let t = [t0];
+        let y = [y0Arr]; 
+        for (let i = 0; i < n; i++) {
+            let ti = t[i];
+            let yi = y[i];
+            let k1 = fArr.map(f => f(ti, yi));
+            let yi_k1 = yi.map((val, j) => val + (h/2)*k1[j]);
+            let k2 = fArr.map(f => f(ti + h/2, yi_k1));
+            let yi_k2 = yi.map((val, j) => val + (h/2)*k2[j]);
+            let k3 = fArr.map(f => f(ti + h/2, yi_k2));
+            let yi_k3 = yi.map((val, j) => val + h*k3[j]);
+            let k4 = fArr.map(f => f(ti + h, yi_k3));
+            let y_next = yi.map((val, j) => val + (h/6)*(k1[j] + 2*k2[j] + 2*k3[j] + k4[j]));
+            y.push(y_next);
+            t.push(ti + h);
+        }
+        return {t, y};
+    }
+};
+</script>
+    <script>
+let charts = {};
+function initChart(id, config) {
+    if(charts[id]) charts[id].destroy();
+    let ctx = document.getElementById(id).getContext('2d');
+    Chart.defaults.color = '#e2e8f0'; 
+    charts[id] = new Chart(ctx, config);
+}
+function navigateToSection(sectionId) {
+    if (window.event && window.event.preventDefault) window.event.preventDefault();
+    document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.add('d-none');
+        section.classList.remove('active-section');
+    });
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.classList.remove('d-none');
+        targetSection.classList.add('active-section');
+    }
+    document.querySelectorAll('#sidebar-wrapper .list-group-item').forEach(item => {
+        item.classList.remove('active-nav-item');
+        if (item.getAttribute('data-section') === sectionId) item.classList.add('active-nav-item');
+    });
+    if (window.innerWidth < 992) document.getElementById('wrapper').classList.remove('toggled');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.addEventListener('DOMContentLoaded', () => {
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('wrapper').classList.toggle('toggled');
+        });
+    }
+    document.querySelectorAll('.list-group-item').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            let targetId = this.getAttribute('data-section');
+            if (targetId) navigateToSection(targetId);
+        });
+    });
+    document.getElementById('form-modulo1').addEventListener('submit', (e) => {
+        e.preventDefault();
+        let A = [
+            [parseFloat(document.getElementById('m1-a00').value), parseFloat(document.getElementById('m1-a01').value), parseFloat(document.getElementById('m1-a02').value)],
+            [parseFloat(document.getElementById('m1-a10').value), parseFloat(document.getElementById('m1-a11').value), parseFloat(document.getElementById('m1-a12').value)],
+            [parseFloat(document.getElementById('m1-a20').value), parseFloat(document.getElementById('m1-a21').value), parseFloat(document.getElementById('m1-a22').value)]
+        ];
+        let b = [
+            parseFloat(document.getElementById('m1-b0').value),
+            parseFloat(document.getElementById('m1-b1').value),
+            parseFloat(document.getElementById('m1-b2').value)
+        ];
+        let method = document.getElementById('m1-metodo').value;
+        let tol = parseFloat(document.getElementById('m1-tol').value);
+        let maxIter = parseInt(document.getElementById('m1-maxiter').value);
+        let res;
+        if(method === "LU" || method === "Gradiente") {
+            res = { x: MathLib.solveGauss(A, b), history: [] }; 
+        } else if(method === "Jacobi") {
+            res = MathLib.Jacobi(A, b, tol, maxIter);
+        } else if(method === "GaussSeidel") {
+            res = MathLib.GaussSeidel(A, b, tol, maxIter);
+        } else if(method === "SOR") {
+            let w = parseFloat(document.getElementById('m1-omega').value) || 1.25;
+            res = MathLib.SOR(A, b, w, tol, maxIter);
+        }
+        document.getElementById('m1-out-x1').innerText = res.x[0].toFixed(2);
+        document.getElementById('m1-out-x2').innerText = res.x[1].toFixed(2);
+        document.getElementById('m1-out-x3').innerText = res.x[2].toFixed(2);
+        let tbody = document.getElementById('m1-tabla-iter-body');
+        tbody.innerHTML = '';
+        if(res.history && res.history.length > 0) {
+            document.getElementById('m1-tabla-iter-container').classList.remove('d-none');
+            res.history.forEach(h => {
+                tbody.innerHTML += `<tr><td>${h.iter}</td><td>${h.x[0].toFixed(4)}</td><td>${h.x[1].toFixed(4)}</td><td>${h.x[2].toFixed(4)}</td><td>${h.error.toExponential(2)}</td></tr>`;
+            });
+        } else {
+            document.getElementById('m1-tabla-iter-container').classList.add('d-none');
+        }
+        document.getElementById('m1-out-interpretacion').innerText = "Distribución optimizada calculada. Iteraciones completadas exitosamente.";
+        initChart('m1-chart', {
+            type: 'bar',
+            data: {
+                labels: ['Norte (x1)', 'Centro (x2)', 'Sur (x3)'],
+                datasets: [{ label: 'Toneladas Enviadas', data: res.x, backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'] }]
+            }
+        });
+    });
+    document.getElementById('form-modulo2').addEventListener('submit', (e) => {
+        e.preventDefault();
+        let R0 = parseFloat(document.getElementById('m2-reserva-ini').value);
+        let E = parseFloat(document.getElementById('m2-entrada').value);
+        let C = parseFloat(document.getElementById('m2-consumo').value);
+        let h = parseFloat(document.getElementById('m2-paso').value);
+        let tf = parseFloat(document.getElementById('m2-tiempo-max').value);
+        let f = (t, R) => E - C; 
+        let euler = MathLib.Euler(f, R0, 0, tf, h);
+        let heun = MathLib.Heun(f, R0, 0, tf, h);
+        let rk4 = MathLib.RK4(f, R0, 0, tf, h);
+        let critDayIndex = rk4.y.findIndex(v => v <= R0*0.1);
+        let colapsoDayIndex = rk4.y.findIndex(v => v <= 0);
+        document.getElementById('m2-dias-criticos').innerText = critDayIndex !== -1 ? rk4.t[critDayIndex].toFixed(1) + " días" : "> " + tf;
+        document.getElementById('m2-colapso-total').innerText = colapsoDayIndex !== -1 ? rk4.t[colapsoDayIndex].toFixed(1) + " días" : "> " + tf;
+        let tbody = document.getElementById('m2-tabla-body');
+        tbody.innerHTML = '';
+        for(let i=0; i<euler.t.length; i++) {
+            let diff = Math.abs((rk4.y[i]||0) - (euler.y[i]||0));
+            tbody.innerHTML += `<tr><td>${euler.t[i].toFixed(2)}</td><td>${(euler.y[i]||0).toFixed(2)}</td><td>${(heun.y[i]||0).toFixed(2)}</td><td>${(rk4.y[i]||0).toFixed(2)}</td><td>${diff.toFixed(2)}</td></tr>`;
+        }
+        initChart('m2-chart', {
+            type: 'line',
+            data: {
+                labels: rk4.t.map(v => v.toFixed(1)),
+                datasets: [
+                    { label: 'Euler', data: euler.y, borderColor: '#3b82f6', tension: 0.1 },
+                    { label: 'RK4', data: rk4.y, borderColor: '#f59e0b', tension: 0.1 }
+                ]
+            }
+        });
+    });
+    document.getElementById('form-modulo3').addEventListener('submit', (e) => {
+        e.preventDefault();
+        let xs = Array.from(document.querySelectorAll('.m3-px')).map(el => parseFloat(el.value));
+        let ys = Array.from(document.querySelectorAll('.m3-py')).map(el => parseFloat(el.value));
+        let xEst = parseFloat(document.getElementById('m3-dia-estimar').value);
+        let yEst = MathLib.Lagrange(xs, ys, xEst);
+        document.getElementById('m3-out-dia-label').innerText = xEst;
+        document.getElementById('m3-out-precio').innerText = yEst.toFixed(2) + " Bs";
+        document.getElementById('m3-out-ecuacion').innerText = "Polinomio interpolante calculado exitosamente para los " + xs.length + " nodos provistos.";
+        let curveX = [], curveY = [];
+        for(let i=xs[0]; i<=xs[xs.length-1]; i+=0.5) {
+            curveX.push(i);
+            curveY.push(MathLib.Lagrange(xs, ys, i));
+        }
+        initChart('m3-chart', {
+            type: 'line',
+            data: {
+                labels: curveX.map(v => v.toFixed(1)),
+                datasets: [
+                    { label: 'Curva de Precios', data: curveY, borderColor: '#f59e0b', tension: 0.4 },
+                    { label: 'Estimación', data: curveX.map(x => x===xEst?yEst:null), backgroundColor: '#ef4444', pointRadius: 6 }
+                ]
+            }
+        });
+    });
+    document.getElementById('form-modulo4').addEventListener('submit', (e) => {
+        e.preventDefault();
+        let a = parseFloat(document.getElementById('m4-a').value);
+        let b = parseFloat(document.getElementById('m4-b').value);
+        let n = parseInt(document.getElementById('m4-n').value);
+        let salario = parseFloat(document.getElementById('m4-salario').value);
+        let p = (t) => 5 * Math.log(t+1) + 8;
+        let xData = [], fData = [];
+        let h = (b-a)/n;
+        for(let i=0; i<=n; i++) {
+            let x = a + i*h;
+            xData.push(x);
+            fData.push(p(x));
+        }
+        let resTrap = MathLib.Trapecio(fData, xData);
+        let resSimp13 = MathLib.Simpson13(fData, xData);
+        let resSimp38 = MathLib.Simpson38(fData, xData);
+        document.getElementById('m4-out-trapecio').innerText = resTrap.toFixed(2);
+        document.getElementById('m4-out-simpson13').innerText = resSimp13.toFixed(2);
+        document.getElementById('m4-out-simpson38').innerText = resSimp38.toFixed(2);
+        let perdida = (resSimp13 / salario) * 100;
+        document.getElementById('m4-out-perdida').innerText = `El gasto acumulado representa un ${perdida.toFixed(1)}% del salario base familiar.`;
+        initChart('m4-chart', {
+            type: 'line',
+            data: {
+                labels: xData.map(v => v.toFixed(1)),
+                datasets: [{ label: 'Precio Diario (Área Integrada)', data: fData, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.2)', fill: true, tension: 0.4 }]
+            }
+        });
+    });
+    document.getElementById('form-modulo5').addEventListener('submit', (e) => {
+        e.preventDefault();
+        let method = document.getElementById('m5-metodo').value;
+        let tol = parseFloat(document.getElementById('m5-tol').value);
+        let maxIter = parseInt(document.getElementById('m5-maxiter').value);
+        let f = (t) => 5.2 * Math.exp(0.12 * t) - 180 + 3.5 * t;
+        let df = (t) => 0.624 * Math.exp(0.12 * t) + 3.5;
+        let res;
+        if(method === "Biseccion") {
+            let a = parseFloat(document.getElementById('m5-a').value);
+            let b = parseFloat(document.getElementById('m5-b').value);
+            res = MathLib.Biseccion(f, a, b, tol, maxIter);
+        } else if(method === "Newton") {
+            let x0 = parseFloat(document.getElementById('m5-x0') ? document.getElementById('m5-x0').value : 20);
+            res = MathLib.NewtonRaphson(f, df, x0, tol, maxIter);
+        } else {
+            let a = parseFloat(document.getElementById('m5-a').value);
+            let b = parseFloat(document.getElementById('m5-b').value);
+            res = MathLib.Secante(f, a, b, tol, maxIter);
+        }
+        document.getElementById('m5-out-raiz').innerText = res.root ? res.root.toFixed(4) : "No hallada";
+        document.getElementById('m5-out-iteraciones').innerText = res.history ? res.history.length : "-";
+        document.getElementById('m5-out-convergencia').innerText = method === "Biseccion" ? "Lineal (1)" : "Cuadrática (2)";
+        let tbody = document.getElementById('m5-tabla-body');
+        tbody.innerHTML = '';
+        if(res.history) {
+            res.history.forEach(h => {
+                tbody.innerHTML += `<tr><td>${h.iter}</td><td>${h.x.toFixed(4)}</td><td>${h.fx.toExponential(2)}</td><td>${h.error.toExponential(2)}</td></tr>`;
+            });
+        }
+        let cX = [], cY = [];
+        for(let i=0; i<=35; i+=1) { cX.push(i); cY.push(f(i)); }
+        initChart('m5-chart', {
+            type: 'line',
+            data: {
+                labels: cX,
+                datasets: [
+                    { label: 'f(t) Costo Neto', data: cY, borderColor: '#ef4444', tension: 0.4 },
+                    { label: 'Línea Cero', data: cX.map(()=>0), borderColor: '#ffffff', borderDash: [5,5] }
+                ]
+            }
+        });
+    });
+    document.getElementById('form-modulo6').addEventListener('submit', (e) => {
+        e.preventDefault();
+        let A = [
+            [parseFloat(document.getElementById('m6-a00').value), parseFloat(document.getElementById('m6-a01').value)],
+            [parseFloat(document.getElementById('m6-a10').value), parseFloat(document.getElementById('m6-a11').value)]
+        ];
+        let b = [parseFloat(document.getElementById('m6-b0').value), parseFloat(document.getElementById('m6-b1').value)];
+        let db = [parseFloat(document.getElementById('m6-db0').value), parseFloat(document.getElementById('m6-db1').value)];
+        let Ainv = MathLib.Inversa2x2(A);
+        let condA = MathLib.NormaInf(A) * MathLib.NormaInf(Ainv);
+        let xOrg = MathLib.solveGauss(A, b);
+        let bPert = [b[0]+db[0], b[1]+db[1]];
+        let xPert = MathLib.solveGauss(A, bPert);
+        document.getElementById('m6-out-condicion').innerText = condA.toExponential(2);
+        document.getElementById('m6-out-x-org').innerText = `[${xOrg[0].toFixed(4)}, ${xOrg[1].toFixed(4)}]`;
+        document.getElementById('m6-out-x-pert').innerText = `[${xPert[0].toFixed(4)}, ${xPert[1].toFixed(4)}]`;
+        let errorB = (Math.max(Math.abs(db[0]), Math.abs(db[1])) / Math.max(Math.abs(b[0]), Math.abs(b[1]))) * 100;
+        let diffX = [xPert[0]-xOrg[0], xPert[1]-xOrg[1]];
+        let errorX = (Math.max(Math.abs(diffX[0]), Math.abs(diffX[1])) / Math.max(Math.abs(xOrg[0]), Math.abs(xOrg[1]))) * 100;
+        document.getElementById('m6-out-cambio-datos').innerText = errorB.toFixed(4) + "%";
+        document.getElementById('m6-out-cambio-solucion').innerText = errorX.toFixed(2) + "%";
+        document.getElementById('m6-out-interpretacion').innerText = `Un cambio del ${errorB.toFixed(4)}% en rumores produjo un desplazamiento logístico del ${errorX.toFixed(2)}%.`;
+        initChart('m6-chart', {
+            type: 'bar',
+            data: {
+                labels: ['Zona 1', 'Zona 2'],
+                datasets: [
+                    { label: 'Normal', data: xOrg, backgroundColor: '#64748b' },
+                    { label: 'Con Rumores', data: xPert, backgroundColor: '#ef4444' }
+                ]
+            }
+        });
+    });
+    document.getElementById('form-modulo7').addEventListener('submit', (e) => {
+        e.preventDefault();
+        let N0 = parseFloat(document.getElementById('m7-n0').value);
+        let M0 = parseFloat(document.getElementById('m7-m0').value);
+        let D0 = parseFloat(document.getElementById('m7-d0').value);
+        let a = parseFloat(document.getElementById('m7-a').value);
+        let b = parseFloat(document.getElementById('m7-b').value);
+        let c = parseFloat(document.getElementById('m7-c').value);
+        let k = parseFloat(document.getElementById('m7-k').value);
+        let r = parseFloat(document.getElementById('m7-r').value);
+        let h = parseFloat(document.getElementById('m7-paso').value);
+        let tf = parseFloat(document.getElementById('m7-tiempo-max').value);
+        let dN = (t, y) => -a*y[0]*y[1] + b*y[2];
+        let dM = (t, y) => a*y[0]*y[1] - c*y[1]*y[2];
+        let dD = (t, y) => k*y[1] - r*y[2];
+        let fArr = [dN, dM, dD];
+        let y0Arr = [N0, M0, D0];
+        let res = MathLib.RK4System(fArr, y0Arr, 0, tf, h);
+        let tbody = document.getElementById('m7-tabla-body');
+        tbody.innerHTML = '';
+        res.t.forEach((ti, i) => {
+            if(i%2===0) { 
+                tbody.innerHTML += `<tr><td>${ti.toFixed(1)}</td><td>${res.y[i][0].toFixed(1)}</td><td class="text-danger">${res.y[i][1].toFixed(1)}</td><td class="text-success">${res.y[i][2].toFixed(1)}</td></tr>`;
+            }
+        });
+        let maxM = Math.max(...res.y.map(v => v[1]));
+        document.getElementById('m7-out-diagnostico').innerText = `Simulación completa. Pico máximo de manifestantes: ${maxM.toFixed(0)} personas.`;
+        initChart('m7-chart', {
+            type: 'line',
+            data: {
+                labels: res.t.map(v => v.toFixed(1)),
+                datasets: [
+                    { label: 'Neutrales (N)', data: res.y.map(v=>v[0]), borderColor: '#f3f4f6', tension: 0.2 },
+                    { label: 'Manifestantes (M)', data: res.y.map(v=>v[1]), borderColor: '#ef4444', tension: 0.2 },
+                    { label: 'Mediadores (D)', data: res.y.map(v=>v[2]), borderColor: '#10b981', tension: 0.2 }
+                ]
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>
